@@ -1,9 +1,12 @@
 {
   "name": "@debridge-finance/debridge-mcp",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "deBridge MCP server",
   "type": "module",
   "main": "dist/index.js",
+  "bin": {
+    "debridge-mcp": "dist/index.js"
+  },
   "scripts": {
     "build": "tsc",
     "dev": "tsx src/index.ts",
@@ -26,6 +29,13 @@
   ],
   "author": "deBridge",
   "license": "MIT",
+  "files": [
+    "dist",
+    "data",
+    "LICENSE",
+    "README.md",
+    "SKILL.md"
+  ],
   "publishConfig": {
     "access": "public"
   },
