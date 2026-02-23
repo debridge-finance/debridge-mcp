@@ -1,12 +1,10 @@
 {
   "name": "@debridge-finance/debridge-mcp",
-  "version": "0.1.1",
+  "version": "0.1.1-hotfix.1",
   "description": "deBridge MCP server",
   "type": "module",
   "main": "dist/index.js",
-  "bin": {
-    "debridge-mcp": "dist/index.js"
-  },
+  "bin": "dist/index.js",
   "scripts": {
     "build": "tsc",
     "dev": "tsx src/index.ts",
