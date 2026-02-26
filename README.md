@@ -9,7 +9,7 @@
 [![GitHub Issues](https://img.shields.io/github/issues/debridge-finance/debridge-mcp?logo=github)](https://github.com/debridge-finance/debridge-mcp/issues)
 [![GitHub Last Commit](https://img.shields.io/github/last-commit/debridge-finance/debridge-mcp?logo=github)](https://github.com/debridge-finance/debridge-mcp/commits/main)
 
-A Model Context Protocol (MCP) server for the [deBridge](https://debridge.com) protocol — enabling AI agents to find optimal cross-chain swap routes, check fees and conditions, and initiate trades across major blockchain networks.
+A Model Context Protocol (MCP) server for the [deBridge](https://debridge.com) protocol — enabling AI agents to find optimal cross-chain and same-chain swap routes, check fees and conditions, and initiate trades across major blockchain networks.
 
 https://github.com/user-attachments/assets/8ebe88ff-db3c-455e-9efb-50389e4bf5bd
 
