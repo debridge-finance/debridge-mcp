@@ -1,0 +1,35 @@
+{
+  "estimation": {
+    "tokenIn": {
+      "address": "0xfafddbb3fc7688494971a79cc65dca3ef82079e7",
+      "name": "MegaUSD",
+      "symbol": "USDm",
+      "decimals": 18,
+      "amount": "20000000000000000000",
+      "approximateUsdValue": 20.0021
+    },
+    "tokenOut": {
+      "address": "0x0000000000000000000000000000000000000000",
+      "name": "Ethereum",
+      "symbol": "ETH",
+      "decimals": 18,
+      "minAmount": "9991221174889058",
+      "amount": "10021309172805808",
+      "approximateUsdValue": 19.939167
+    },
+    "slippage": 0.3,
+    "recommendedSlippage": 0.3,
+    "comparedAggregators": [
+      {
+        "name": "KyberSwap",
+        "amount": "10021309172805808",
+        "priceDrop": 0,
+        "approximateUsdValue": 19.923216,
+        "imageUrl": "https://cdn.debridge.finance/images/brands/kyberswap.svg"
+      }
+    ],
+    "protocolFee": "8023466111133",
+    "protocolFeeApproximateUsdValue": 0.015951,
+    "costsDetails": []
+  }
+}

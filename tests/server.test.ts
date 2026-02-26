@@ -1,9 +1,20 @@
-import { describe, it, expect, beforeEach, afterEach } from "vitest";
+import { readFileSync } from "node:fs";
+import { resolve, dirname } from "node:path";
+import { fileURLToPath } from "node:url";
+import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { InMemoryTransport } from "@modelcontextprotocol/sdk/inMemory.js";
 import { TokenDb } from "../src/lib/token-db.js";
 import { pkg } from "../src/lib/pkg.js";
 import { createServer } from "../src/server.js";
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
+
+function loadFixture(name: string) {
+  return JSON.parse(
+    readFileSync(resolve(__dirname, "fixtures/live-api", name), "utf-8"),
+  );
+}
 
 function setupClient() {
   const tokenDb = TokenDb.load();
@@ -136,7 +147,22 @@ describe("debridge-mcp server", () => {
   });
 
   describe("estimate_same_chain_swap", () => {
+    afterEach(() => {
+      vi.restoreAllMocks();
+    });
+
+    function mockFetch(fixture: string, status = 200) {
+      const body = loadFixture(fixture);
+      vi.spyOn(globalThis, "fetch").mockResolvedValue(
+        new Response(JSON.stringify(body), {
+          status,
+          headers: { "Content-Type": "application/json" },
+        }),
+      );
+    }
+
     it("returns error for unknown chain ID without calling API", async () => {
+      const fetchSpy = vi.spyOn(globalThis, "fetch");
       const result = await client.callTool({
         name: "estimate_same_chain_swap",
         arguments: {
@@ -150,9 +176,11 @@ describe("debridge-mcp server", () => {
       const text = (result.content as Array<{ type: string; text: string }>)[0].text;
       const data = JSON.parse(text);
       expect(data.error).toContain("Unknown chain ID");
+      expect(fetchSpy).not.toHaveBeenCalled();
     });
 
     it("estimates ETH → USDC swap on Ethereum", async () => {
+      mockFetch("estimation-eth-usdc-ethereum.json");
       const result = await client.callTool({
         name: "estimate_same_chain_swap",
         arguments: {
@@ -171,6 +199,7 @@ describe("debridge-mcp server", () => {
     });
 
     it("estimates USDC → USDT swap on Arbitrum", async () => {
+      mockFetch("estimation-usdc-usdt-arbitrum.json");
       const result = await client.callTool({
         name: "estimate_same_chain_swap",
         arguments: {
@@ -184,11 +213,12 @@ describe("debridge-mcp server", () => {
       const data = JSON.parse((result.content as Array<{ text: string }>)[0].text);
       expect(data.estimation).toBeDefined();
       expect(data.estimation.tokenIn.symbol).toBe("USDC");
-      expect(data.estimation.tokenOut.symbol).toMatch(/USD[T₮]/);  // API returns "USD₮0"
+      expect(data.estimation.tokenOut.symbol).toMatch(/USD[T₮]/);
       expect(Number(data.estimation.tokenOut.amount)).toBeGreaterThan(0);
     });
 
     it("passes explicit slippage to the API", async () => {
+      mockFetch("estimation-eth-usdc-ethereum-slippage1.json");
       const result = await client.callTool({
         name: "estimate_same_chain_swap",
         arguments: {
@@ -206,6 +236,7 @@ describe("debridge-mcp server", () => {
     });
 
     it("estimates USDM → ETH swap on MegaETH", async () => {
+      mockFetch("estimation-usdm-eth-megaeth.json");
       const result = await client.callTool({
         name: "estimate_same_chain_swap",
         arguments: {
@@ -223,6 +254,7 @@ describe("debridge-mcp server", () => {
     });
 
     it("returns API error for invalid token address", async () => {
+      mockFetch("estimation-error-invalid-token.json", 400);
       const result = await client.callTool({
         name: "estimate_same_chain_swap",
         arguments: {
@@ -234,7 +266,7 @@ describe("debridge-mcp server", () => {
       });
       expect(result.isError).toBe(true);
       const data = JSON.parse((result.content as Array<{ text: string }>)[0].text);
-      expect(data.statusCode).toBeGreaterThanOrEqual(400);
+      expect(data.statusCode).toBe(400);
     });
   });
 

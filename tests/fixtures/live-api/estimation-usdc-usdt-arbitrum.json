@@ -1,0 +1,45 @@
+{
+  "estimation": {
+    "tokenIn": {
+      "address": "0xaf88d065e77c8cc2239327c5edb3a432268e5831",
+      "name": "USD Coin",
+      "symbol": "USDC",
+      "decimals": 6,
+      "amount": "1000000000",
+      "approximateUsdValue": 1000
+    },
+    "tokenOut": {
+      "address": "0xfd086bc7cd5c481dcc9c85ebe478a1c0b69fcbb9",
+      "name": "USD₮0",
+      "symbol": "USD₮0",
+      "decimals": 6,
+      "minAmount": "998345753",
+      "amount": "999145709",
+      "approximateUsdValue": 999.945665
+    },
+    "slippage": 0.08,
+    "recommendedSlippage": 0.08,
+    "comparedAggregators": [
+      {
+        "name": "OKX",
+        "amount": "999145709",
+        "priceDrop": 0,
+        "approximateUsdValue": 999.145709,
+        "imageUrl": "https://cdn.debridge.finance/images/brands/okx.svg"
+      }
+    ],
+    "protocolFee": "799956",
+    "estimatedTransactionFee": {
+      "total": "71247124000000",
+      "details": {
+        "gasLimit": "2740000",
+        "baseFee": "26002600",
+        "maxFeePerGas": "26002600",
+        "maxPriorityFeePerGas": "0"
+      },
+      "approximateUsdValue": 0.141579
+    },
+    "protocolFeeApproximateUsdValue": 0.799956,
+    "costsDetails": []
+  }
+}
