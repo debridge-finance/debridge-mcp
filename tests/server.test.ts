@@ -2,6 +2,7 @@ import { describe, it, expect, beforeEach, afterEach } from "vitest";
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { InMemoryTransport } from "@modelcontextprotocol/sdk/inMemory.js";
 import { TokenDb } from "../src/lib/token-db.js";
+import { pkg } from "../src/lib/pkg.js";
 import { createServer } from "../src/server.js";
 
 function setupClient() {
@@ -42,7 +43,7 @@ describe("debridge-mcp server", () => {
 
   it("returns server info on initialize", async () => {
     const info = client.getServerVersion();
-    expect(info).toEqual({ name: "debridge-mcp", version: "0.1.0" });
+    expect(info).toEqual({ name: pkg.name, version: pkg.version });
   });
 
   it("lists tools", async () => {

@@ -3,6 +3,7 @@ import request from "supertest";
 import express, { type Express } from "express";
 import { StreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/streamableHttp.js";
 import { TokenDb } from "../src/lib/token-db.js";
+import { pkg } from "../src/lib/pkg.js";
 import { createServer } from "../src/server.js";
 
 describe("HTTP Streamable Transport", () => {
@@ -57,7 +58,8 @@ describe("HTTP Streamable Transport", () => {
       expect(response.body).toHaveProperty("id", 1);
       expect(response.body.result).toHaveProperty("protocolVersion");
       expect(response.body.result).toHaveProperty("serverInfo");
-      expect(response.body.result.serverInfo.name).toBe("debridge-mcp");
+      expect(response.body.result.serverInfo.name).toBe(pkg.name);
+      expect(response.body.result.serverInfo.version).toBe(pkg.version);
     });
 
     it("should return server capabilities", async () => {

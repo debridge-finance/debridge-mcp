@@ -3,6 +3,7 @@ import { resolve, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import type { TokenDb } from "./lib/token-db.js";
+import { pkg } from "./lib/pkg.js";
 import { registerSearchTokens } from "./tools/search-tokens.js";
 import { registerGetSupportedChains } from "./tools/get-supported-chains.js";
 import { registerCreateTx } from "./tools/create-tx.js";
@@ -14,8 +15,8 @@ const skillMd = readFileSync(resolve(__dirname, "../SKILL.md"), "utf-8");
 
 export function createServer(tokenDb: TokenDb) {
   const server = new McpServer({
-    name: "debridge-mcp",
-    version: "0.1.0",
+    name: pkg.name,
+    version: pkg.version,
   });
 
   server.registerTool(
