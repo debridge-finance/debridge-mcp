@@ -1,7 +1,7 @@
 {
   "name": "@debridge-finance/debridge-mcp",
   "version": "0.1.4",
-  "description": "deBridge MCP server",
+  "description": "Thin MCP proxy client for deBridge — connects to the hosted MCPd at agents.debridge.com",
   "type": "module",
   "main": "dist/index.js",
   "bin": "dist/index.js",
@@ -13,8 +13,7 @@
     "start:http": "MCP_TRANSPORT=http node dist/index.js",
     "inspect": "npx @modelcontextprotocol/inspector tsx src/index.ts",
     "test": "vitest run",
-    "test:watch": "vitest",
-    "api-validate": "tsx scripts/api-validate.ts"
+    "test:watch": "vitest"
   },
   "keywords": [
     "debridge",
@@ -30,10 +29,8 @@
   "license": "MIT",
   "files": [
     "dist",
-    "data",
     "LICENSE",
-    "README.md",
-    "SKILL.md"
+    "README.md"
   ],
   "publishConfig": {
     "access": "public"
@@ -45,8 +42,7 @@
   "mcpName": "io.github.debridge-finance/debridge-mcp",
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.26.0",
-    "express": "^5.2.1",
-    "zod": "^4.3.6"
+    "express": "^5.2.1"
   },
   "devDependencies": {
     "@types/express": "^5.0.6",
