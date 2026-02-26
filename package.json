@@ -1,6 +1,6 @@
 {
   "name": "@debridge-finance/debridge-mcp",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "deBridge MCP server",
   "type": "module",
   "main": "dist/index.js",
