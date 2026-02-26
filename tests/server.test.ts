@@ -48,7 +48,7 @@ describe("debridge-mcp server", () => {
   it("lists tools", async () => {
     const result = await client.listTools();
     const names = result.tools.map((t) => t.name).sort();
-    expect(names).toEqual(["create_tx", "get_instructions", "get_supported_chains", "get_trade_dapp_url", "search_tokens"]);
+    expect(names).toEqual(["create_tx", "estimate_same_chain_swap", "get_instructions", "get_supported_chains", "get_trade_dapp_url", "search_tokens"]);
   });
 
   it("returns instructions from get_instructions tool", async () => {
@@ -131,6 +131,109 @@ describe("debridge-mcp server", () => {
       });
       const data = JSON.parse((result.content as Array<{ text: string }>)[0].text);
       expect(data.total).toBeLessThanOrEqual(2);
+    });
+  });
+
+  describe("estimate_same_chain_swap", () => {
+    it("returns error for unknown chain ID without calling API", async () => {
+      const result = await client.callTool({
+        name: "estimate_same_chain_swap",
+        arguments: {
+          chainId: "999999",
+          tokenIn: "0x0000000000000000000000000000000000000000",
+          tokenInAmount: "1000000000000000000",
+          tokenOut: "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+        },
+      });
+      expect(result.isError).toBe(true);
+      const text = (result.content as Array<{ type: string; text: string }>)[0].text;
+      const data = JSON.parse(text);
+      expect(data.error).toContain("Unknown chain ID");
+    });
+
+    it("estimates ETH → USDC swap on Ethereum", async () => {
+      const result = await client.callTool({
+        name: "estimate_same_chain_swap",
+        arguments: {
+          chainId: "1",
+          tokenIn: "0x0000000000000000000000000000000000000000",
+          tokenInAmount: "1000000000000000000",
+          tokenOut: "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+        },
+      });
+      expect(result.isError).toBeUndefined();
+      const data = JSON.parse((result.content as Array<{ text: string }>)[0].text);
+      expect(data.estimation).toBeDefined();
+      expect(data.estimation.tokenIn.symbol).toBe("ETH");
+      expect(data.estimation.tokenOut.symbol).toBe("USDC");
+      expect(Number(data.estimation.tokenOut.amount)).toBeGreaterThan(0);
+    });
+
+    it("estimates USDC → USDT swap on Arbitrum", async () => {
+      const result = await client.callTool({
+        name: "estimate_same_chain_swap",
+        arguments: {
+          chainId: "42161",
+          tokenIn: "0xaf88d065e77c8cC2239327C5EDb3A432268e5831",
+          tokenInAmount: "1000000000",
+          tokenOut: "0xFd086bC7CD5C481DCC9C85ebE478A1C0b69FCbb9",
+        },
+      });
+      expect(result.isError).toBeUndefined();
+      const data = JSON.parse((result.content as Array<{ text: string }>)[0].text);
+      expect(data.estimation).toBeDefined();
+      expect(data.estimation.tokenIn.symbol).toBe("USDC");
+      expect(data.estimation.tokenOut.symbol).toMatch(/USD[T₮]/);  // API returns "USD₮0"
+      expect(Number(data.estimation.tokenOut.amount)).toBeGreaterThan(0);
+    });
+
+    it("passes explicit slippage to the API", async () => {
+      const result = await client.callTool({
+        name: "estimate_same_chain_swap",
+        arguments: {
+          chainId: "1",
+          tokenIn: "0x0000000000000000000000000000000000000000",
+          tokenInAmount: "1000000000000000000",
+          tokenOut: "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+          slippage: "1",
+        },
+      });
+      expect(result.isError).toBeUndefined();
+      const data = JSON.parse((result.content as Array<{ text: string }>)[0].text);
+      expect(data.estimation).toBeDefined();
+      expect(data.estimation.slippage).toBe(1);
+    });
+
+    it("estimates USDM → ETH swap on MegaETH", async () => {
+      const result = await client.callTool({
+        name: "estimate_same_chain_swap",
+        arguments: {
+          chainId: "4326",
+          tokenIn: "0xfafddbb3fc7688494971a79cc65dca3ef82079e7",
+          tokenInAmount: "20000000000000000000",
+          tokenOut: "0x0000000000000000000000000000000000000000",
+        },
+      });
+      expect(result.isError).toBeUndefined();
+      const data = JSON.parse((result.content as Array<{ text: string }>)[0].text);
+      expect(data.estimation).toBeDefined();
+      expect(data.estimation.tokenIn.symbol).toMatch(/USDm/i);
+      expect(Number(data.estimation.tokenOut.amount)).toBeGreaterThan(0);
+    });
+
+    it("returns API error for invalid token address", async () => {
+      const result = await client.callTool({
+        name: "estimate_same_chain_swap",
+        arguments: {
+          chainId: "1",
+          tokenIn: "0x0000000000000000000000000000000000000000",
+          tokenInAmount: "1000000000000000000",
+          tokenOut: "0x0000000000000000000000000000000000000001",
+        },
+      });
+      expect(result.isError).toBe(true);
+      const data = JSON.parse((result.content as Array<{ text: string }>)[0].text);
+      expect(data.statusCode).toBeGreaterThanOrEqual(400);
     });
   });
 

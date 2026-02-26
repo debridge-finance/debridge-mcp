@@ -7,6 +7,7 @@ import { registerSearchTokens } from "./tools/search-tokens.js";
 import { registerGetSupportedChains } from "./tools/get-supported-chains.js";
 import { registerCreateTx } from "./tools/create-tx.js";
 import { registerGetTradeDappUrl } from "./tools/get-trade-dapp-url.js";
+import { registerEstimateSameChainSwap } from "./tools/estimate-same-chain-swap.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const skillMd = readFileSync(resolve(__dirname, "../SKILL.md"), "utf-8");
@@ -37,6 +38,7 @@ export function createServer(tokenDb: TokenDb) {
   registerGetSupportedChains(server, tokenDb);
   registerCreateTx(server);
   registerGetTradeDappUrl(server);
+  registerEstimateSameChainSwap(server, tokenDb);
 
   return server;
 }

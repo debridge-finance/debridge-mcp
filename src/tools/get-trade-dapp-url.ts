@@ -34,6 +34,10 @@ export function registerGetTradeDappUrl(server: McpServer) {
           .optional()
           .default("simple")
           .describe("DLN mode: 'simple' (default) or 'advanced'"),
+        address: z
+          .string()
+          .optional()
+          .describe("Recipient wallet address on the destination chain. Use when the recipient differs from the sender's connected wallet"),
       },
     },
     async (params) => {
@@ -45,6 +49,9 @@ export function registerGetTradeDappUrl(server: McpServer) {
       url.searchParams.set("outputCurrency", params.outputCurrency);
       url.searchParams.set("amount", params.amount);
       url.searchParams.set("dlnMode", params.dlnMode);
+      if (params.address) {
+        url.searchParams.set("address", params.address);
+      }
 
       return {
         content: [

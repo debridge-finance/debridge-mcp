@@ -155,3 +155,23 @@ describe("TokenDb.search", () => {
     expect(results).toEqual([]);
   });
 });
+
+describe("TokenDb.resolveApiChainId", () => {
+  const db = TokenDb.load();
+
+  it("native ID without subscription returns chainId as-is (Ethereum '1' → '1')", () => {
+    expect(db.resolveApiChainId("1")).toBe("1");
+  });
+
+  it("native ID with subscription returns debridgeSubscriptionId (MegaETH '4326' → '100000031')", () => {
+    expect(db.resolveApiChainId("4326")).toBe("100000031");
+  });
+
+  it("already-internal ID passthrough ('100000031' → '100000031')", () => {
+    expect(db.resolveApiChainId("100000031")).toBe("100000031");
+  });
+
+  it("unknown ID returns undefined", () => {
+    expect(db.resolveApiChainId("999999")).toBeUndefined();
+  });
+});

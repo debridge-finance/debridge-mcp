@@ -15,14 +15,20 @@ Follow these steps to fulfill a user's swap or transfer request:
    "ETH") and the relevant `chainId` to get the token's contract address and decimals.
    Always confirm the correct token with the user when multiple results are returned.
 
-3. **Create the transaction**: Call `create_tx` with the resolved chain IDs, token addresses,
-   and the amount converted to the token's smallest units (e.g. multiply by 10^decimals).
-   Use `dstChainTokenOutAmount: 'auto'` to get the best available quote.
-   The response includes the estimated output amount, fees, and raw transaction data.
-   Present the quote to the user before proceeding.
+3. **Get a quote**:
+   - **Same-chain swap**: Call `estimate_same_chain_swap` with the chain ID, token addresses,
+     and the amount in smallest units. It accepts both native chain IDs (e.g. `'4326'` for MegaETH)
+     and deBridge internal IDs. The response includes the estimated output amount, fees, slippage,
+     and aggregator comparisons. Present the quote to the user before proceeding.
+   - **Cross-chain swap**: Call `create_tx` with the resolved chain IDs, token addresses,
+     and the amount converted to the token's smallest units (e.g. multiply by 10^decimals).
+     Use `dstChainTokenOutAmount: 'auto'` to get the best available quote.
+     The response includes the estimated output amount, fees, and raw transaction data.
+     Present the quote to the user before proceeding.
 
 4. **Generate a deBridge App link**: Call `get_trade_dapp_url` with the same chain IDs,
-   token addresses, and the human-readable amount (NOT in smallest units) to produce a URL.
+   token addresses, the human-readable amount (NOT in smallest units), and the recipient
+   `address` (if known) to produce a URL.
    Share this URL with the user so they can review and execute the swap in the deBridge App.
 
 ## Feedback
@@ -41,9 +47,12 @@ Ask for user's feedback at natural breakpoints — never mid-task. Append to you
 - `get_instructions` — Show this guide.
 - `get_supported_chains` — List all supported blockchain networks with their chain IDs.
 - `search_tokens` — Look up tokens by name, symbol, or address. Supports filtering by chain.
-- `create_tx` — Build a cross-chain or same-chain swap transaction via deBridge DLN.
+- `estimate_same_chain_swap` — Estimate a same-chain token swap. Returns the expected output
+  amount, fees, slippage, and aggregator comparisons. Accepts native or deBridge internal chain IDs.
+- `create_tx` — Build a cross-chain swap transaction via deBridge DLN.
   Returns a quote with estimated output, fees, and the transaction payload.
 - `get_trade_dapp_url` — Generate a pre-filled deBridge App URL for the user to execute the swap.
+  Accepts an optional `address` parameter to pre-fill the recipient wallet on the destination chain.
 
 ## Tips
 

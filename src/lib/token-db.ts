@@ -72,6 +72,16 @@ export class TokenDb {
     return [...this.chains].sort((a, b) => a.chainNames[0].localeCompare(b.chainNames[0]));
   }
 
+  resolveApiChainId(id: string): string | undefined {
+    // Already a deBridge internal ID?
+    const bySubscription = this.chains.find((c) => c.debridgeSubscriptionId === id);
+    if (bySubscription) return id;
+    // Native chain ID → resolve to API ID
+    const byNative = this.chains.find((c) => c.chainId === id);
+    if (byNative) return byNative.debridgeSubscriptionId ?? byNative.chainId;
+    return undefined;
+  }
+
   findByAddress(chainId: string, address: string): TokenEntry | undefined {
     const lower = address.toLowerCase();
     return this.tokens.find(
