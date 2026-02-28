@@ -4,16 +4,13 @@ COPY package*.json ./
 RUN npm ci --production=false
 COPY tsconfig.json ./
 COPY src/ ./src/
-COPY data/ ./data/
 RUN npm run build
 
 FROM node:24-alpine AS production
 WORKDIR /app
 COPY --from=builder /app/dist ./dist
-COPY --from=builder /app/data ./data
 COPY --from=builder /app/node_modules ./node_modules
 COPY package*.json ./
-COPY SKILL.md ./
 ENV NODE_ENV=production
 ENV MCP_TRANSPORT=http
 ENV PORT=3000
