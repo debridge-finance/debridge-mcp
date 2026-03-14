@@ -1,5 +1,0 @@
-{
-  "errorCode": 114,
-  "errorId": "TOKEN_PAIR_NOT_TRADABLE",
-  "errorMessage": "The given token pair is not tradable."
-}
