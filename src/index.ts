@@ -14,13 +14,13 @@ import express from "express";
 import { Readable } from "node:stream";
 import { pkg } from "./lib/pkg.js";
 
-const DEFAULT_MCPD_URL = "https://agents.debridge.com/mcp";
-const mcpdUrl = process.env.MCPD_URL || DEFAULT_MCPD_URL;
+const DEFAULT_REMOTE_MCP_URL = "https://agents.debridge.com/mcp";
+const remoteMcpUrl = process.env.REMOTE_MCP_URL || DEFAULT_REMOTE_MCP_URL;
 
 if (process.env.MCP_TRANSPORT === "http") {
-  startHttpProxy(mcpdUrl);
+  startHttpProxy(remoteMcpUrl);
 } else {
-  startStdioProxy(mcpdUrl);
+  startStdioProxy(remoteMcpUrl);
 }
 
 /**

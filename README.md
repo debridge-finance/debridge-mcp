@@ -273,7 +273,7 @@ Then connect your agent to `http://localhost:3000/mcp` using the Streamable HTTP
 
 | Variable | Default | Description |
 |----------|---------|-------------|
-| `MCPD_URL` | `https://agents.debridge.com/mcp` | Upstream MCPd endpoint to proxy to |
+| `REMOTE_MCP_URL` | `https://agents.debridge.com/mcp` | Remote MCP endpoint to proxy to |
 | `MCP_TRANSPORT` | `stdio` | Transport mode: `stdio` or `http` |
 | `PORT` | `3000` | HTTP listen port (HTTP mode only) |
 | `HOST` | `0.0.0.0` | HTTP listen host (HTTP mode only) |
