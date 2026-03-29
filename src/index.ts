@@ -163,7 +163,10 @@ function startHttpProxy(url: string) {
       process.exit(1);
     }
     console.error(
-      `deBridge MCP proxy running on http://${host}:${port}/mcp \u2192 ${url}`,
+      `deBridge MCP proxy running on http://${host}:${port}/mcp → ${url}`,
+    );
+    console.error(
+      `Tip: if your agent supports Streamable HTTP, connect directly to ${url} — no proxy needed.`,
     );
   });
 }
