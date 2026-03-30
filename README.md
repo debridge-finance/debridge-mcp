@@ -292,6 +292,10 @@ Add to your OpenClaw config (`~/.openclaw/mcp.json`):
 
 </details>
 
+## Hosted deployment
+
+A hosted deployment is available on [Fronteir AI](https://fronteir.ai/mcp/debridge-finance-debridge-mcp).
+
 ## Development
 
 ```bash
