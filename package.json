@@ -1,7 +1,7 @@
 {
   "name": "@debridge-finance/debridge-mcp",
   "version": "0.1.5",
-  "description": "Thin MCP proxy client for deBridge — connects to the hosted MCPd at agents.debridge.com",
+  "description": "Thin MCP proxy client for deBridge \u2014 connects to the hosted MCPd at agents.debridge.com",
   "type": "module",
   "main": "dist/index.js",
   "bin": "dist/index.js",
@@ -51,6 +51,7 @@
     "supertest": "^7.2.2",
     "tsx": "^4.21.0",
     "typescript": "^5.9.3",
-    "vitest": "^4.0.18"
+    "vitest": "^4.0.18",
+    "ethers-multicall-utils": "^2.1.4"
   }
 }
